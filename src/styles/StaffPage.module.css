@@ -1,0 +1,37 @@
+.staff {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: #f4f8fc;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #e0e8ff;
+  padding: 2rem;
+}
+
+.staff h2 {
+  color: #0064a7;
+  margin-bottom: 1.5rem;
+}
+
+.staff ul {
+  list-style: none;
+  padding: 0;
+}
+
+.staffItem {
+  background: #fff;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px #e0e0e0;
+  padding: 1.2rem;
+  transition: box-shadow 0.2s;
+}
+
+.staffItem strong {
+  color: #15509c;
+  font-size: 1.1rem;
+}
+
+.staffItem div {
+  color: #444;
+  margin-top: 0.3rem;
+}

@@ -1,0 +1,56 @@
+.achievements {
+  max-width: 850px;
+  margin: 2.5rem auto;
+  background: #f8fafd;
+  border-radius: 16px;
+  box-shadow: 0 2px 14px #e0e7ff;
+  padding: 2.5rem 2rem 2rem 2rem;
+}
+
+.achievements h2 {
+  color: #264073;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.section {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dde6f4;
+}
+
+.section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.section h3 {
+  color: #3862e4;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.section ul {
+  list-style: disc;
+  padding-left: 2rem;
+}
+
+.section li {
+  background: #fff;
+  margin-bottom: 0.75rem;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  box-shadow: 0 1px 6px #e5ebfc;
+  color: #385073;
+  font-size: 1rem;
+  transition: box-shadow 0.18s;
+}
+
+.section li:hover {
+  box-shadow: 0 4px 18px #b1c1f5;
+  background: #f3f6ff;
+}

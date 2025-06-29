@@ -1,0 +1,81 @@
+/* src/styles/StudentPopup.module.css */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 15, 15, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+}
+
+.popup h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: #0077cc;
+}
+
+.popup p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  border-left: 3px solid #e0e0e0;
+  padding-left: 10px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: #e53935;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    background: rgba(15, 15, 15, 0);
+  }
+  to {
+    background: rgba(15, 15, 15, 0.6);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

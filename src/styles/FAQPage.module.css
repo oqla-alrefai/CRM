@@ -1,0 +1,69 @@
+/* src/styles/FAQPage.module.css */
+.faq {
+  max-width: 650px;
+  margin: 2.5rem auto;
+  background: #f6f7fc;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px #e0e7ff;
+  padding: 2rem;
+}
+
+.faq h2 {
+  text-align: center;
+  color: #1a237e;
+  margin-bottom: 1.5rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.item {
+  background: #fff;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 5px #e0e7ff;
+  padding: 1rem 1.2rem;
+  transition: box-shadow 0.15s;
+}
+
+.item strong {
+  color: #263371;
+  font-size: 1.05rem;
+}
+
+.item p {
+  margin: 0.5rem 0 0 0.2rem;
+  color: #495169;
+  font-size: 0.99rem;
+}
+
+/* ───── Add-FAQ form ───── */
+.form {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form input,
+.form textarea {
+  padding: 0.7rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: none;
+}
+
+.form button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #1a237e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form button:hover {
+  background-color: #0f1653;
+}

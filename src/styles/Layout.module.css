@@ -1,0 +1,19 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f3f6fa;
+  width: 100vw;         /* Take full viewport width */
+  min-width: 100vw;
+  overflow-x: hidden;   /* Prevent horizontal scroll */
+}
+
+main {
+  flex: 1 1 0%;
+  padding: 2rem 1rem 2.5rem 1rem;
+  width: 100%;          /* Fill width */
+  margin: 0 auto;
+  box-sizing: border-box;
+  /* Remove max-width if you want truly full-width: */
+  max-width: none;
+}

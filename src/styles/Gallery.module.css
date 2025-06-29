@@ -1,0 +1,38 @@
+.gallery {
+  max-width: 900px;
+  margin: 2.5rem auto;
+  background: #f7f8fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px #e0e7ff;
+  padding: 2rem;
+}
+
+.gallery h2 {
+  text-align: center;
+  margin-top: 0;
+  color: #293574;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.2rem;
+}
+
+.images img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 1px 7px #e3e7ee;
+  transition: transform 0.15s, box-shadow 0.18s;
+  cursor: pointer;
+}
+
+.images img:hover {
+  transform: scale(1.04) rotate(-1deg);
+  box-shadow: 0 8px 28px #b1c1f5;
+}
