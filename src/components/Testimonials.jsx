@@ -5,7 +5,7 @@ export default function Testimonials() {
     <section className={styles.testimonials}>
       <h2>What Our Students Say</h2>
       <blockquote>
-        "The school changed my life!" - Student Name
+        "Lorem ipsum " - Test
       </blockquote>
     </section>
   );
