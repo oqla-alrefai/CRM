@@ -23,8 +23,11 @@ export default function AddStudentForm() {
     notes: "",
     program: "",
     visit_location: "",
+    visit_date: "",
     student_grade: "",
     previous_school: "",
+    interviewer: "",
+    action_taken: ""
   });
 
   useEffect(() => {
@@ -44,7 +47,23 @@ export default function AddStudentForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addStudent(form)).then((action) => {
+    const [datePart, timePart] = form.visit_date?.split("T") || [];
+    const payload = {
+      contact_officer: form.interviewer,
+      contact_type: form.call_type,
+      caller_name: form.caller_name,
+      student_name: form.first_name,
+      student_class_level: form.which_class,
+      residence_area: form.location,
+      previous_school: form.previous_school,
+      interview_date: datePart || "",
+      interview_time: timePart || "",
+      interview_location: form.visit_location,
+      action_taken: form.action_taken,
+      contact_phone_number: form.mobile,
+      notes: form.notes,
+    };
+    dispatch(addStudent(payload)).then((action) => {
       if (addStudent.fulfilled.match(action)) {
         setForm({
           caller_name: "",
@@ -59,8 +78,11 @@ export default function AddStudentForm() {
           notes: "",
           program: "",
           visit_location: "",
+          visit_date: "",
           student_grade: "",
           previous_school: "",
+          interviewer: "",
+          action_taken: ""
         });
         setSlide(1);
       }
@@ -69,7 +91,6 @@ export default function AddStudentForm() {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-
       <div className={styles.slider}>
         {slide === 1 && (
           <div className={styles.slide}>
@@ -103,6 +124,8 @@ export default function AddStudentForm() {
             <input name="interests" placeholder="Interests" value={form.interests} onChange={handleChange} required />
             <input name="how_you_heard" placeholder="How did you hear about us?" value={form.how_you_heard} onChange={handleChange} />
             <textarea name="notes" placeholder="Interviewer Notes" value={form.notes} onChange={handleChange} />
+            <input name="interviewer" placeholder="Interviewer Name" value={form.interviewer} onChange={handleChange} />
+            <input name="action_taken" placeholder="Action Taken" value={form.action_taken} onChange={handleChange} />
           </div>
         )}
 
