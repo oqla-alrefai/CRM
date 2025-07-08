@@ -14,6 +14,7 @@ import News from './pages/News';
 import Contact from './pages/Contact';
 import Layout from './components/Layout';
 import NotFound from './pages/NotFound';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           </Routes>
         </Layout>
       </Router>
+      <ToastContainer position="top-right" autoClose={3000} />
     </Provider>
   );
 }

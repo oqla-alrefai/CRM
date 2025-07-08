@@ -1,81 +1,89 @@
-/* src/styles/StudentPopup.module.css */
-
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(15, 15, 15, 0.6);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
-  backdrop-filter: blur(4px);
+  justify-content: center;
+  z-index: 999;
   animation: fadeIn 0.3s ease-in-out;
 }
 
 .popup {
-  background: #ffffff;
-  padding: 2rem;
+  background: #1e1e2f;
+  color: #f1f1f1;
   border-radius: 16px;
-  max-width: 500px;
+  padding: 24px;
   width: 90%;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+  max-width: 500px;
   position: relative;
-  animation: slideUp 0.3s ease-out;
-  font-family: "Segoe UI", sans-serif;
-  color: #333;
+  animation: slideIn 0.4s ease-in-out;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
 }
 
 .popup h2 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-  color: #0077cc;
+  margin-bottom: 16px;
+  font-size: 1.6rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+  color: #ffffff;
 }
 
-.popup p {
-  margin: 0.5rem 0;
-  font-size: 1rem;
-  line-height: 1.4;
-  border-left: 3px solid #e0e0e0;
-  padding-left: 10px;
+.popup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.closeButton {
+.popup li {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.popup strong {
+  color: #7bdff2;
+  font-weight: 600;
+}
+
+.closeBtn {
   position: absolute;
-  top: 12px;
-  right: 16px;
-  background: none;
+  top: 10px;
+  right: 12px;
+  font-size: 1.4rem;
+  background: transparent;
   border: none;
-  font-size: 1.8rem;
-  color: #888;
+  color: #ffffffcc;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.closeButton:hover {
-  color: #e53935;
+.closeBtn:hover {
+  transform: scale(1.2);
+  color: #7bdff2;
 }
 
 /* Animations */
-@keyframes fadeIn {
+@keyframes slideIn {
   from {
-    background: rgba(15, 15, 15, 0);
-  }
-  to {
-    background: rgba(15, 15, 15, 0.6);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(30px);
+    transform: translateY(-40px);
     opacity: 0;
   }
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    background: rgba(0, 0, 0, 0.6);
   }
 }

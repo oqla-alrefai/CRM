@@ -1,36 +1,53 @@
-// src/api/authAxios.js
-import axios from "axios";
-import { getAccessToken, refreshAccessToken } from "../utils/authHelpers";
+// src/utils/axiosWithAuth.js
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const authAxios = axios.create();
-
-authAxios.interceptors.request.use((config) => {
-  const token = getAccessToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+const axiosInstance = axios.create({
+  baseURL: 'https://isoenrollment.onrender.com/api',
 });
 
-// Interceptor to refresh access token on 401
-authAxios.interceptors.response.use(
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const accessToken = Cookies.get('access_token');
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const isUnauthorized = error.response?.status === 401;
 
-    if (isUnauthorized && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      Cookies.get('refresh_token')
+    ) {
       originalRequest._retry = true;
       try {
-        const newToken = await refreshAccessToken();
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-        return authAxios(originalRequest); // Retry original request
+        const refreshResponse = await axios.post(
+          'https://isoenrollment.onrender.com/api/token/refresh/',
+          { refresh: Cookies.get('refresh_token') }
+        );
+
+        const newAccessToken = refreshResponse.data.access;
+        Cookies.set('access_token', newAccessToken, { expires: 1 });
+
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // If refresh also fails, let it bubble up
+        Cookies.remove('access_token');
+        Cookies.remove('refresh_token');
+        window.location.href = '/login';
       }
     }
+
     return Promise.reject(error);
   }
 );
 
-export default authAxios;
+export default axiosInstance;

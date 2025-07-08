@@ -1,6 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from "../../utils/AuthAxios";
 import Cookies from 'js-cookie';
+import { jwtDecode } from "jwt-decode";
+
+const accessToken = Cookies.get("access_token");
+
+let decodedUser = null;
+if (accessToken) {
+  try {
+    const decoded = jwtDecode(accessToken);
+
+    decodedUser = {
+      id: decoded.user_id,
+      username: decoded.username,
+      is_superuser: decoded.is_superuser || false,
+      email: decoded.email || null,
+    };
+  } catch (err) {
+    console.error("Invalid token", err);
+  }
+}
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -10,14 +29,13 @@ export const login = createAsyncThunk(
         'https://isoenrollment.onrender.com/api/token/',
         { username, password }
       );
-      console.log('Login response:', response.data);
-      
-      const { access, refresh } = response.data;
+
+      const { refresh, access } = response.data;
 
       // Save tokens to cookies
       Cookies.set('access_token', access, { expires: 1 });   // Expires in 1 day
       Cookies.set('refresh_token', refresh, { expires: 7 }); // Expires in 7 days
-      
+
       return { access, refresh, username }; // you can add more user info if available
     } catch (error) {
       return rejectWithValue(
@@ -28,7 +46,7 @@ export const login = createAsyncThunk(
 );
 
 const initialState = {
-  user: null,
+  user: decodedUser,
   loading: false,
   error: null,
 };
@@ -52,6 +70,7 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
+
         state.user = { username: action.payload.username };
         state.error = null;
       })

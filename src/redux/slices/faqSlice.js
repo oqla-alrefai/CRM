@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
 import authAxios from "../../utils/AuthAxios";
+import { toast } from "react-toastify";
 
 const BASE_URL = "https://isoenrollment.onrender.com/api/faqs/";
 
@@ -36,6 +37,29 @@ export const createFAQ = createAsyncThunk("faq/create", async (faq, thunkAPI) =>
   }
 });
 
+// Async thunk to delete FAQ by ID
+export const deleteFaq = createAsyncThunk(
+  "faqs/deleteFaq",
+  async (faqId, { rejectWithValue }) => {
+    try {
+      const token = Cookies.get("access_token");
+      const response = await axios.delete(
+        `https://isoenrollment.onrender.com/api/faqs/${faqId}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("FAQ deleted successfully.");
+      return faqId;
+    } catch (error) {
+      toast.error("Failed to delete FAQ.");
+      return rejectWithValue(error.response?.data || "Failed to delete FAQ");
+    }
+  }
+);
+
 /* ────────────────────────────────
    Slice
 ──────────────────────────────────*/
@@ -57,7 +81,22 @@ const faqSlice = createSlice({
       // createFAQ
       .addCase(createFAQ.pending,   (st) => { st.error = null; }) // keep current loading state
       .addCase(createFAQ.fulfilled, (st, { payload }) => { st.faqs.push(payload); })
-      .addCase(createFAQ.rejected,  (st, { payload }) => { st.error = payload; });
+      .addCase(createFAQ.rejected,  (st, { payload }) => { st.error = payload; })
+
+      // deleteFaq
+      
+      .addCase(deleteFaq.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteFaq.fulfilled, (state, action) => {
+        state.loading = false;
+        state.faqs = state.faqs.filter((faq) => faq.id !== action.payload);
+      })
+      .addCase(deleteFaq.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

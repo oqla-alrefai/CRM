@@ -1,9 +1,9 @@
+// src/redux/slices/studentsSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import Cookies from "js-cookie";
-import { refreshAccessToken } from "../../utils/authHelpers";
 import authAxios from "../../utils/AuthAxios";
-// Helper to wait until token is ready (handles timing issues)
+
+// Wait until access_token is available (helps during login/refresh timing)
 const getTokenWithRetry = async (retries = 5, delay = 100) => {
   let token = Cookies.get("access_token");
   while (!token && retries > 0) {
@@ -14,47 +14,28 @@ const getTokenWithRetry = async (retries = 5, delay = 100) => {
   return token;
 };
 
-// Fetch students
+// 🔹 Fetch Students
 export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
   async (_, { rejectWithValue }) => {
     try {
       const token = await getTokenWithRetry();
       if (!token) return rejectWithValue("No access token");
-      
-      const response = await authAxios.get(
-        "https://isoenrollment.onrender.com/api/students/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Fetched students:", response.data);
-      
-      return response.data; // assuming single student wrapped in array
-    }  catch (error) {
-      if (error.response?.status === 401) {
-        try {
-          token = await refreshAccessToken();
-          const retryResponse = await authAxios.get(
-            "https://isoenrollment.onrender.com/api/students/",
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          return retryResponse.data;
-        } catch (refreshError) {
-          return rejectWithValue("Session expired. Please log in again.");
-        }
-      }
 
-      return rejectWithValue("Failed to fetch students");
+      const res = await authAxios.get("/students/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.detail || "Failed to fetch students"
+      );
     }
   }
 );
 
-// Add student
+// 🔹 Add Student
 export const addStudent = createAsyncThunk(
   "students/addStudent",
   async (studentData, { rejectWithValue }) => {
@@ -62,20 +43,40 @@ export const addStudent = createAsyncThunk(
       const token = await getTokenWithRetry();
       if (!token) return rejectWithValue("No access token");
 
-      const response = await authAxios.post(
-        "https://isoenroll-test.onrender.com/api/students/",
-        studentData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return response.data;
+      const res = await authAxios.post("/students/", studentData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return res.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.detail || "Failed to add student"
+      );
+    }
+  }
+);
+
+// 🔹 Delete Student
+export const deleteStudent = createAsyncThunk(
+  "students/deleteStudent",
+  async (studentId, { rejectWithValue }) => {
+    try {
+      const token = await getTokenWithRetry();
+      if (!token) return rejectWithValue("No access token");
+
+      await authAxios.delete(`/students/${studentId}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return studentId;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.detail || "Failed to delete student"
       );
     }
   }
@@ -100,7 +101,7 @@ const studentsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch students
+      // 🔸 Fetch Students
       .addCase(fetchStudents.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -114,7 +115,7 @@ const studentsSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Add student
+      // 🔸 Add Student
       .addCase(addStudent.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -129,6 +130,16 @@ const studentsSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.addSuccess = false;
+      })
+
+      // 🔸 Delete Student
+      .addCase(deleteStudent.fulfilled, (state, action) => {
+        state.students = state.students.filter(
+          (student) => student.id !== action.payload
+        );
+      })
+      .addCase(deleteStudent.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });

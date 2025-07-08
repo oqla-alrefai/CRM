@@ -19,8 +19,11 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(login(form));
-    navigate("/")
+    const resultAction = await dispatch(login(form));
+
+    if (login.fulfilled.match(resultAction)) {
+      navigate("/");
+    }
   };
 
   return (

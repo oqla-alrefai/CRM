@@ -1,69 +1,120 @@
-/* src/styles/FAQPage.module.css */
 .faq {
-  max-width: 650px;
-  margin: 2.5rem auto;
-  background: #f6f7fc;
+  max-width: 700px;
+  margin: 3rem auto;
+  background: #fdfdfd;
   border-radius: 16px;
-  box-shadow: 0 2px 12px #e0e7ff;
-  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem;
+  font-family: "Segoe UI", sans-serif;
+  transition: all 0.3s ease-in-out;
 }
 
 .faq h2 {
   text-align: center;
   color: #1a237e;
-  margin-bottom: 1.5rem;
-  font-size: 1.7rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
   font-weight: 700;
+  position: relative;
+}
+
+.faq h2::after {
+  content: "";
+  width: 50px;
+  height: 3px;
+  background-color: #1a237e;
+  display: block;
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
 }
 
 .item {
-  background: #fff;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 5px #e0e7ff;
-  padding: 1rem 1.2rem;
-  transition: box-shadow 0.15s;
+  background: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
 .item strong {
-  color: #263371;
-  font-size: 1.05rem;
+  color: #1a237e;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.4rem;
 }
 
 .item p {
-  margin: 0.5rem 0 0 0.2rem;
-  color: #495169;
-  font-size: 0.99rem;
+  margin: 0.3rem 0 0;
+  color: #555c71;
+  font-size: 0.96rem;
+  line-height: 1.5;
 }
 
-/* ───── Add-FAQ form ───── */
+.deleteBtn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #d9534f;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.deleteBtn:hover {
+  color: #b52b27;
+}
+
+/* ───── Add FAQ form ───── */
 .form {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #dbe3f1;
 }
 
 .form input,
 .form textarea {
-  padding: 0.7rem 1rem;
-  border: 1px solid #cbd5e1;
+  padding: 0.8rem 1rem;
+  border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 1rem;
-  resize: none;
+  font-family: inherit;
+  background: #f9fafb;
+  transition: border 0.2s ease;
+}
+
+.form input:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: #1a237e;
+  background-color: #fff;
 }
 
 .form button {
-  padding: 0.75rem;
+  padding: 0.8rem;
   font-size: 1rem;
+  font-weight: 600;
   background-color: #1a237e;
-  color: #fff;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.25s ease;
 }
 
 .form button:hover {
-  background-color: #0f1653;
+  background-color: #0e1647;
 }
