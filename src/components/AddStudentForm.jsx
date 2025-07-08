@@ -112,16 +112,16 @@ export default function AddStudentForm() {
             </div>
             <input name="caller_name" placeholder="Caller Name" value={form.caller_name} onChange={handleChange} required />
             <input name="mobile" placeholder="Mobile" value={form.mobile} onChange={handleChange} />
-            <input name="first_name" placeholder="Student Name" value={form.first_name} onChange={handleChange} required />
-            <input name="location" placeholder="Location" value={form.location} onChange={handleChange} required />
-            <input name="gender" placeholder="Gender" value={form.gender} onChange={handleChange} required />
+            <input name="first_name" placeholder="Student Name" value={form.first_name} onChange={handleChange}  />
+            <input name="location" placeholder="Location" value={form.location} onChange={handleChange}  />
+            <input name="gender" placeholder="Gender" value={form.gender} onChange={handleChange}  />
           </div>
         )}
 
         {slide === 2 && (
           <div className={styles.slide}>
-            <input name="which_class" placeholder="Which Class" value={form.which_class} onChange={handleChange} required />
-            <input name="interests" placeholder="Interests" value={form.interests} onChange={handleChange} required />
+            <input name="which_class" placeholder="Which Class" value={form.which_class} onChange={handleChange}  />
+            <input name="interests" placeholder="Interests" value={form.interests} onChange={handleChange}  />
             <input name="how_you_heard" placeholder="How did you hear about us?" value={form.how_you_heard} onChange={handleChange} />
             <textarea name="notes" placeholder="Interviewer Notes" value={form.notes} onChange={handleChange} />
             <input name="interviewer" placeholder="Interviewer Name" value={form.interviewer} onChange={handleChange} />
