@@ -1,8 +1,14 @@
-// src/components/AddStudentForm.jsx
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addStudent, clearAddSuccess } from "../redux/slices/studentsSlice";
 import styles from "../styles/AddStudentForm.module.css";
+
+// Helper to get current datetime-local formatted string
+const getNowAsDatetimeLocal = () => {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  return now.toISOString().slice(0, 16);
+};
 
 export default function AddStudentForm() {
   const dispatch = useDispatch();
@@ -21,9 +27,9 @@ export default function AddStudentForm() {
     mobile: "",
     how_you_heard: "",
     notes: "",
-    program: "",
+    program: "IT", // default
     visit_location: "",
-    visit_date: "",
+    visit_date: getNowAsDatetimeLocal(), // default
     student_grade: "",
     previous_school: "",
     interviewer: "",
@@ -50,18 +56,18 @@ export default function AddStudentForm() {
     const [datePart, timePart] = form.visit_date?.split("T") || [];
     const payload = {
       contact_officer: form.interviewer,
-      contact_type: form.call_type,
+      contact_type: form.call_type || "",
       caller_name: form.caller_name,
-      student_name: form.first_name,
-      student_class_level: form.which_class,
-      residence_area: form.location,
-      previous_school: form.previous_school,
+      student_name: form.first_name || "",
+      student_class_level: form.which_class || "",
+      residence_area: form.location || "",
+      previous_school: form.previous_school || "",
       interview_date: datePart || "",
       interview_time: timePart || "",
-      interview_location: form.visit_location,
-      action_taken: form.action_taken,
-      contact_phone_number: form.mobile,
-      notes: form.notes,
+      interview_location: form.visit_location || "",
+      action_taken: form.action_taken || "",
+      contact_phone_number: form.mobile || "",
+      notes: form.notes || "",
     };
     dispatch(addStudent(payload)).then((action) => {
       if (addStudent.fulfilled.match(action)) {
@@ -76,9 +82,9 @@ export default function AddStudentForm() {
           mobile: "",
           how_you_heard: "",
           notes: "",
-          program: "",
+          program: "IT",
           visit_location: "",
-          visit_date: "",
+          visit_date: getNowAsDatetimeLocal(),
           student_grade: "",
           previous_school: "",
           interviewer: "",
@@ -112,16 +118,16 @@ export default function AddStudentForm() {
             </div>
             <input name="caller_name" placeholder="Caller Name" value={form.caller_name} onChange={handleChange} required />
             <input name="mobile" placeholder="Mobile" value={form.mobile} onChange={handleChange} />
-            <input name="first_name" placeholder="Student Name" value={form.first_name} onChange={handleChange}  />
-            <input name="location" placeholder="Location" value={form.location} onChange={handleChange}  />
-            <input name="gender" placeholder="Gender" value={form.gender} onChange={handleChange}  />
+            <input name="first_name" placeholder="Student Name" value={form.first_name} onChange={handleChange} />
+            <input name="location" placeholder="Location" value={form.location} onChange={handleChange} />
+            <input name="gender" placeholder="Gender" value={form.gender} onChange={handleChange} />
           </div>
         )}
 
         {slide === 2 && (
           <div className={styles.slide}>
-            <input name="which_class" placeholder="Which Class" value={form.which_class} onChange={handleChange}  />
-            <input name="interests" placeholder="Interests" value={form.interests} onChange={handleChange}  />
+            <input name="which_class" placeholder="Which Class" value={form.which_class} onChange={handleChange} />
+            <input name="interests" placeholder="Interests" value={form.interests} onChange={handleChange} />
             <input name="how_you_heard" placeholder="How did you hear about us?" value={form.how_you_heard} onChange={handleChange} />
             <textarea name="notes" placeholder="Interviewer Notes" value={form.notes} onChange={handleChange} />
             <input name="interviewer" placeholder="Interviewer Name" value={form.interviewer} onChange={handleChange} />
