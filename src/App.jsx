@@ -15,6 +15,7 @@ import Contact from './pages/Contact';
 import Layout from './components/Layout';
 import NotFound from './pages/NotFound';
 import { ToastContainer } from 'react-toastify';
+import StudentDashboard from './components/StudentDashboard';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/staff" element={<Staff />} />
             <Route path="/news" element={<News />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/Dashboard" element={<StudentDashboard />} />
             {/* erro page */}
             <Route path="*" element={<NotFound/>} />
           </Routes>
