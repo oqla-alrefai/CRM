@@ -1,12 +1,9 @@
 .nav {
-  display: flex;
-  flex-direction: column;
   background: #14213d;
   padding: 1rem 2rem;
 }
 
 .navHeader {
-  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,6 +28,7 @@
   align-items: center;
   justify-content: center;
   gap: 1.2rem;
+  margin-top: 1rem; /* Default margin, removed in desktop */
 }
 
 .link a {
@@ -45,6 +43,10 @@
 
 /* Responsive rules for mobile */
 @media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+  }
+
   .menuBtn {
     display: block;
   }
@@ -53,10 +55,22 @@
     flex-direction: column;
     width: 100%;
     display: none;
-    margin-top: 1rem;
   }
 
   .show {
     display: flex;
+  }
+}
+
+/* Desktop: align logo and links on the same row */
+@media (min-width: 769px) {
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .link {
+    margin-top: 0;
   }
 }
