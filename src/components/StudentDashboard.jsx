@@ -3,18 +3,73 @@ import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudents } from '../redux/slices/studentsSlice';
+import ChartModal from './ChartModal';
 import styles from '../styles/StudentDashboard.module.css';
-import Chart from 'chart.js/auto';
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+// 🧠 Modal for selecting chart column and type
+const ChartSelectorModal = ({ columns, onSelect, onClose }) => {
+  const [selectedCol, setSelectedCol] = useState('');
+  const [selectedChart, setSelectedChart] = useState('');
+
+  const chartTypes = ['bar', 'pie', 'line'];
+
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
+        <h3>Select Column & Chart Type</h3>
+
+        <div className={styles.selector}>
+          <label>Column:</label>
+          <select onChange={(e) => setSelectedCol(e.target.value)} value={selectedCol}>
+            <option value="">-- Choose Column --</option>
+            {columns.map((col) => (
+              <option key={col.field} value={col.field}>
+                {col.headerName || col.field}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.selector}>
+          <label>Chart Type:</label>
+          <select onChange={(e) => setSelectedChart(e.target.value)} value={selectedChart}>
+            <option value="">-- Choose Chart Type --</option>
+            {chartTypes.map((type) => (
+              <option key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.modalButtons}>
+          <button
+            onClick={() => {
+              if (selectedCol && selectedChart) {
+                onSelect(selectedCol, selectedChart);
+                onClose();
+              }
+            }}
+          >
+            Generate Chart
+          </button>
+          <button onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const GridExample = () => {
   const dispatch = useDispatch();
   const { students } = useSelector((state) => state.students);
-  const [selectedField, setSelectedField] = useState(null);
-  const [showChart, setShowChart] = useState(false);
-  const [chartData, setChartData] = useState({});
+
+  const [selectedColumn, setSelectedColumn] = useState(null);
+  const [chartType, setChartType] = useState(null);
+  const [showChartSelector, setShowChartSelector] = useState(false);
 
   useEffect(() => {
     dispatch(fetchStudents());
@@ -47,57 +102,21 @@ const GridExample = () => {
     { field: "interview_location", headerName: "Visit Location", filter: true },
   ];
 
-  const onColumnHeaderClicked = (event) => {
-    const field = event.column.getColDef().field;
-    if (!field) return;
-
-    // Count occurrences
-    const counts = {};
-    rowData.forEach((row) => {
-      const value = row[field] || 'Unknown';
-      counts[value] = (counts[value] || 0) + 1;
-    });
-
-    const labels = Object.keys(counts);
-    const data = Object.values(counts);
-
-    setSelectedField(field);
-    setChartData({ labels, data });
-    setShowChart(true);
-  };
-
   useEffect(() => {
-    if (showChart && chartData.labels?.length) {
-      const ctx = document.getElementById("pieChart").getContext("2d");
-      new Chart(ctx, {
-        type: "pie",
-        data: {
-          labels: chartData.labels,
-          datasets: [
-            {
-              data: chartData.data,
-              backgroundColor: [
-                "#ff6384", "#36a2eb", "#cc65fe", "#ffce56", "#2ecc71", "#e67e22"
-              ],
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            title: {
-              display: true,
-              text: `Distribution of "${selectedField}"`,
-              font: { size: 16 }
-            },
-          },
-        },
-      });
-    }
-  }, [showChart, chartData, selectedField]);
+    const handleKeyPress = (e) => {
+      if (e.key.toLowerCase() === 'p') {
+        setShowChartSelector(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, []);
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Student Dashboard</h2>
+
       <div className={`ag-theme-alpine ${styles.gridWrapper}`}>
         <AgGridReact
           rowData={rowData}
@@ -105,18 +124,28 @@ const GridExample = () => {
           pagination={true}
           paginationPageSize={10}
           defaultColDef={{ sortable: true, filter: true, resizable: true }}
-          onColumnHeaderClicked={onColumnHeaderClicked}
         />
       </div>
 
-      {/* Modal for Pie Chart */}
-      {showChart && (
-        <div className={styles.modalOverlay} onClick={() => setShowChart(false)}>
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <canvas id="pieChart" width="400" height="400"></canvas>
-            <button className={styles.closeButton} onClick={() => setShowChart(false)}>Close</button>
-          </div>
-        </div>
+      {showChartSelector && (
+        <ChartSelectorModal
+          columns={columnDefs}
+          onSelect={(col, type) => {
+            setSelectedColumn(col);
+            setChartType(type);
+          }}
+          onClose={() => setShowChartSelector(false)}
+        />
+      )}
+
+      {selectedColumn && (
+        <ChartModal
+          field={selectedColumn}
+          data={rowData}
+          chartType={chartType}
+          setChartType={setChartType}
+          onClose={() => setSelectedColumn(null)}
+        />
       )}
     </div>
   );
