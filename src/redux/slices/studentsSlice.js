@@ -1,4 +1,3 @@
-// src/redux/slices/studentsSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import authAxios from "../../utils/AuthAxios";
@@ -22,9 +21,7 @@ export const fetchStudents = createAsyncThunk(
       const token = await getTokenWithRetry();
       if (!token) return rejectWithValue("No access token");
 
-      const res = await authAxios.get("/students/", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await authAxios.get("/students/");
 
       return res.data;
     } catch (error) {
@@ -43,12 +40,7 @@ export const addStudent = createAsyncThunk(
       const token = await getTokenWithRetry();
       if (!token) return rejectWithValue("No access token");
 
-      const res = await authAxios.post("/students/", studentData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await authAxios.post("/students/");
 
       return res.data;
     } catch (error) {
@@ -67,11 +59,7 @@ export const deleteStudent = createAsyncThunk(
       const token = await getTokenWithRetry();
       if (!token) return rejectWithValue("No access token");
 
-      await authAxios.delete(`/students/${studentId}/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await authAxios.delete(`/students/${studentId}/`);
 
       return studentId;
     } catch (error) {
